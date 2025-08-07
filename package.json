@@ -3,6 +3,9 @@
   "version": "1.0.0",
   "description": "Advanced security scanner with AI-powered threat analysis",
   "private": true,
+  "engines": {
+    "node": ">=20.x"
+  },
   "scripts": {
     "build": "next build",
     "dev": "next dev",

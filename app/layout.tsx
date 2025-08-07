@@ -4,9 +4,9 @@ import { GeistMono } from 'geist/font/mono'
 import './globals.css'
 
 export const metadata: Metadata = {
-  title: 'v0 App',
-  description: 'Created with v0',
-  generator: 'v0.dev',
+  title: 'BrixShield - Advanced Security Scanner',
+  description: 'Advanced security scanner with AI-powered threat analysis for URLs and files',
+  generator: 'BrixShield Security Scanner',
 }
 
 export default function RootLayout({

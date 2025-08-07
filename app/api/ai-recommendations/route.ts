@@ -1,6 +1,4 @@
 import { NextRequest, NextResponse } from 'next/server'
-import { generateText } from 'ai'
-import { openai } from '@ai-sdk/openai'
 
 export async function POST(request: NextRequest) {
   try {
@@ -39,17 +37,50 @@ Threats Found: ${data.threats.join(', ') || 'None'}
 Provide 3-5 specific, actionable security recommendations for handling this file safely. Include best practices for file security and threat mitigation.`
     }
 
-    const { text } = await generateText({
-      model: openai('gpt-4o'),
-      prompt,
-      system: 'You are a cybersecurity expert providing clear, actionable security recommendations. Be specific and practical in your advice.'
+    // Use OpenRouter API
+    const response = await fetch('https://openrouter.ai/api/v1/chat/completions', {
+      method: 'POST',
+      headers: {
+        'Authorization': `Bearer ${process.env.OPENROUTER_API_KEY}`,
+        'Content-Type': 'application/json',
+        'HTTP-Referer': process.env.NEXT_PUBLIC_SITE_URL || 'http://localhost:3000',
+        'X-Title': 'BrixShield Security Scanner'
+      },
+      body: JSON.stringify({
+        model: 'anthropic/claude-3.5-sonnet', // You can also use 'openai/gpt-4o' or other models
+        messages: [
+          {
+            role: 'system',
+            content: 'You are a cybersecurity expert providing clear, actionable security recommendations. Be specific and practical in your advice. Provide responses in a professional yet accessible tone.'
+          },
+          {
+            role: 'user',
+            content: prompt
+          }
+        ],
+        temperature: 0.7,
+        max_tokens: 1000
+      })
     })
 
-    return NextResponse.json({ recommendations: text })
+    if (!response.ok) {
+      const errorData = await response.text()
+      console.error('OpenRouter API error:', response.status, errorData)
+      throw new Error(`OpenRouter API failed: ${response.status}`)
+    }
+
+    const result = await response.json()
+    const recommendations = result.choices[0]?.message?.content
+
+    if (!recommendations) {
+      throw new Error('No recommendations generated')
+    }
+
+    return NextResponse.json({ recommendations })
   } catch (error) {
     console.error('AI recommendation error:', error)
     return NextResponse.json(
-      { error: 'Failed to generate recommendations' },
+      { error: 'Failed to generate recommendations. Please try again later.' },
       { status: 500 }
     )
   }

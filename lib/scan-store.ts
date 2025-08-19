@@ -21,7 +21,7 @@ interface ScanResult {
 
 class ScanStore {
   private static instance: ScanStore
-  private storageKey = 'brixshield_scan_history'
+  private storageKey = 'securemyurl_scan_history'
   private listeners: Set<() => void> = new Set()
 
   static getInstance(): ScanStore {

@@ -298,7 +298,7 @@ async function checkURLWithSafeBrowsing(url: string, threats: string[], score: n
       },
       body: JSON.stringify({
         client: {
-          clientId: 'brixshield',
+          clientId: 'securemyurl',
           clientVersion: '1.0.0'
         },
         threatInfo: {

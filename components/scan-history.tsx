@@ -142,13 +142,13 @@ export default function ScanHistory() {
     try {
       switch (format) {
         case 'json':
-          downloadJSON(reportData, `brixshield-scan-report-${count}-scans-${timestamp}.json`)
+          downloadJSON(reportData, `securemyurl-scan-report-${count}-scans-${timestamp}.json`)
           break
         case 'csv':
-          downloadCSV(filteredHistory, `brixshield-scan-report-${count}-scans-${timestamp}.csv`)
+          downloadCSV(filteredHistory, `securemyurl-scan-report-${count}-scans-${timestamp}.csv`)
           break
         case 'html':
-          downloadHTML(reportData, `brixshield-scan-report-${count}-scans-${timestamp}.html`)
+          downloadHTML(reportData, `securemyurl-scan-report-${count}-scans-${timestamp}.html`)
           break
       }
       
@@ -183,13 +183,13 @@ export default function ScanHistory() {
     try {
       switch (format) {
         case 'json':
-          downloadJSON(reportData, `brixshield-selected-scans-${count}-items-${timestamp}.json`)
+          downloadJSON(reportData, `securemyurl-selected-scans-${count}-items-${timestamp}.json`)
           break
         case 'csv':
-          downloadCSV(selectedScans, `brixshield-selected-scans-${count}-items-${timestamp}.csv`)
+          downloadCSV(selectedScans, `securemyurl-selected-scans-${count}-items-${timestamp}.csv`)
           break
         case 'html':
-          downloadHTML(reportData, `brixshield-selected-scans-${count}-items-${timestamp}.html`)
+          downloadHTML(reportData, `securemyurl-selected-scans-${count}-items-${timestamp}.html`)
           break
       }
       
@@ -497,9 +497,9 @@ export default function ScanHistory() {
                       </div>
 
                       {item.aiRecommendations && (
-                        <div className="mt-3 p-3 bg-blue-50 rounded-lg">
-                          <h4 className="text-xs font-medium text-blue-800 mb-1">AI Recommendations:</h4>
-                          <p className="text-xs text-blue-700 line-clamp-3">{item.aiRecommendations}</p>
+                        <div className="mt-3 p-3 bg-accent rounded-lg border border-border">
+                          <h4 className="text-xs font-medium text-foreground mb-1">Recommendations:</h4>
+                          <p className="text-xs text-muted-foreground line-clamp-3">{item.aiRecommendations}</p>
                         </div>
                       )}
                     </div>

@@ -140,7 +140,7 @@ export default function UrlScanner() {
     }
   }
 
-  const generateAIRecommendations = async () => {
+  const generateRecommendations = async () => {
     if (!result) return
 
     setIsGeneratingAI(true)
@@ -152,7 +152,7 @@ export default function UrlScanner() {
       })
 
       if (!response.ok) {
-        throw new Error('AI generation failed')
+        throw new Error('Generation failed')
       }
 
       const { recommendations } = await response.json()
@@ -166,14 +166,14 @@ export default function UrlScanner() {
       }
 
       toast({
-        title: "AI Analysis Complete",
+        title: "Analysis Complete",
         description: "Security recommendations generated successfully"
       })
 
     } catch (error) {
       console.error('AI generation error:', error)
       toast({
-        title: "AI Analysis Failed",
+        title: "Generation Failed",
         description: "Unable to generate recommendations. Please try again.",
         variant: "destructive"
       })
@@ -476,7 +476,7 @@ export default function UrlScanner() {
                   </div>
                   {!result.aiRecommendations && (
                     <Button
-                      onClick={generateAIRecommendations}
+                      onClick={generateRecommendations}
                       disabled={isGeneratingAI}
                       variant="outline"
                       size="sm"
@@ -486,7 +486,7 @@ export default function UrlScanner() {
                       ) : (
                         <Brain className="h-4 w-4 mr-2" />
                       )}
-                      Generate AI Analysis
+                      Generate Recommendations
                     </Button>
                   )}
                 </CardTitle>

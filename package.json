@@ -1,7 +1,7 @@
 {
-  "name": "brixshield-security-app",
+  "name": "securemyurl-security-app",
   "version": "1.0.0",
-  "description": "Advanced security scanner with AI-powered threat analysis",
+  "description": "Advanced security scanner for URLs and files",
   "private": true,
   "engines": {
     "node": ">=20.x"
@@ -92,6 +92,6 @@
   "license": "MIT",
   "repository": {
     "type": "git",
-    "url": "https://github.com/OwoabasiEshiet/BrixShield.git"
+  "url": "https://github.com/OwoabasiEshiet/securemyurl.git"
   }
 }

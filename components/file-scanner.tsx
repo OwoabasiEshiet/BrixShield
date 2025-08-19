@@ -187,7 +187,7 @@ export default function FileScanner() {
     }
   }
 
-  const handleAIRecommendations = async (result: FileResult) => {
+  const handleGenerateAnalysis = async (result: FileResult) => {
     setIsGeneratingAI(result.scanId)
     try {
       const response = await fetch('/api/ai-recommendations', {
@@ -213,14 +213,14 @@ export default function FileScanner() {
       ))
       
       toast({
-        title: "AI Analysis Complete",
-        description: "Advanced security recommendations generated",
+        title: "Analysis Complete",
+        description: "Security recommendations generated",
       })
     } catch (error) {
       console.error('AI recommendations error:', error)
       toast({
-        title: "AI Analysis Failed",
-        description: "Unable to generate AI recommendations",
+        title: "Analysis Failed",
+        description: "Unable to generate recommendations",
         variant: "destructive"
       })
     } finally {
@@ -596,7 +596,7 @@ export default function FileScanner() {
                       <Button
                         variant="outline"
                         size="sm"
-                        onClick={() => handleAIRecommendations(result)}
+                        onClick={() => handleGenerateAnalysis(result)}
                         disabled={isGeneratingAI === result.scanId}
                         className="w-full"
                       >
@@ -608,7 +608,7 @@ export default function FileScanner() {
                         ) : (
                           <>
                             <Brain className="h-4 w-4 mr-2" />
-                            Get AI Analysis
+                            Generate Analysis
                           </>
                         )}
                       </Button>
@@ -620,13 +620,13 @@ export default function FileScanner() {
                   </div>
                 </div>
 
-                {/* AI Recommendations */}
+                {/* Recommendations */}
                 {result.aiRecommendations && (
-                  <div className="mt-6 p-4 bg-purple-50 border border-purple-200 rounded-lg">
+                  <div className="mt-6 p-4 bg-accent border border-border rounded-lg">
                     <div className="flex items-center justify-between mb-3">
-                      <h4 className="font-medium text-purple-800 flex items-center space-x-2">
+                      <h4 className="font-medium text-foreground flex items-center space-x-2">
                         <Brain className="h-4 w-4" />
-                        <span>AI Security Analysis</span>
+                        <span>Recommendations</span>
                       </h4>
                       <Button
                         variant="outline"
@@ -639,7 +639,7 @@ export default function FileScanner() {
                     <Textarea
                       value={result.aiRecommendations}
                       readOnly
-                      className="min-h-[120px] bg-white border-purple-200"
+                      className="min-h-[120px] bg-card"
                     />
                   </div>
                 )}

@@ -44,7 +44,7 @@ Provide 3-5 specific, actionable security recommendations for handling this file
         'Authorization': `Bearer ${process.env.OPENROUTER_API_KEY}`,
         'Content-Type': 'application/json',
         'HTTP-Referer': process.env.NEXT_PUBLIC_SITE_URL || 'http://localhost:3000',
-        'X-Title': 'BrixShield Security Scanner'
+  'X-Title': 'Secure my URL Security Scanner'
       },
       body: JSON.stringify({
         model: 'anthropic/claude-3.5-sonnet', // You can also use 'openai/gpt-4o' or other models

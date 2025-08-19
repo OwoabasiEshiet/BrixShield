@@ -191,11 +191,16 @@ async function analyzeURL(url: string) {
     recommendations.push('Multiple subdomains can be used to deceive users')
   }
   
-  // REAL-TIME CHECKS (you can integrate actual APIs here)
+  // REAL-TIME CHECKS (Google Safe Browsing integration)
   try {
-    await checkURLWithSafeBrowsing(url, threats, score)
+    const sbMatch = await checkURLWithSafeBrowsing(url)
+    if (sbMatch) {
+      score = 0
+      threats.push('Confirmed threat by Google Safe Browsing')
+      recommendations.push('DO NOT visit this website - confirmed by Google Safe Browsing')
+    }
   } catch (error) {
-    console.log('Safe Browsing API unavailable, using local analysis')
+    console.log('Safe Browsing API unavailable or failed, using local analysis')
   }
   
   // Ensure score doesn't go below 0
@@ -280,16 +285,14 @@ function levenshteinDistance(str1: string, str2: string): number {
 }
 
 // Optional: Integrate with Google Safe Browsing API
-async function checkURLWithSafeBrowsing(url: string, threats: string[], score: number) {
-  // This is a placeholder for Google Safe Browsing API integration
-  // You would need to sign up for the API and add your key to environment variables
-  
+// Returns true when Google Safe Browsing reports a match for the URL
+async function checkURLWithSafeBrowsing(url: string): Promise<boolean> {
   const GOOGLE_SAFE_BROWSING_API_KEY = process.env.GOOGLE_SAFE_BROWSING_API_KEY
-  
-  if (!GOOGLE_SAFE_BROWSING_API_KEY) {
-    return // Skip if no API key
-  }
-  
+  if (!GOOGLE_SAFE_BROWSING_API_KEY) return false
+
+  // use a short timeout to avoid blocking the analyzer
+  const controller = new AbortController()
+  const timeout = setTimeout(() => controller.abort(), 5000)
   try {
     const response = await fetch(`https://safebrowsing.googleapis.com/v4/threatMatches:find?key=${GOOGLE_SAFE_BROWSING_API_KEY}`, {
       method: 'POST',
@@ -302,22 +305,24 @@ async function checkURLWithSafeBrowsing(url: string, threats: string[], score: n
           clientVersion: '1.0.0'
         },
         threatInfo: {
-          threatTypes: ['MALWARE', 'SOCIAL_ENGINEERING', 'UNWANTED_SOFTWARE'],
+          threatTypes: ['MALWARE','SOCIAL_ENGINEERING','UNWANTED_SOFTWARE','POTENTIALLY_HARMFUL_APPLICATION'],
           platformTypes: ['ANY_PLATFORM'],
           threatEntryTypes: ['URL'],
           threatEntries: [{ url }]
         }
-      })
+      }),
+      signal: controller.signal
     })
-    
+
+    if (!response.ok) return false
     const result = await response.json()
-    
-    if (result.matches && result.matches.length > 0) {
-      threats.push('Confirmed threat by Google Safe Browsing')
-      score = 0
-    }
+    return !!(result && result.matches && result.matches.length > 0)
   } catch (error) {
+    // treat errors as no-match but log for diagnostics
     console.log('Safe Browsing check failed:', error)
+    return false
+  } finally {
+    clearTimeout(timeout)
   }
 }
 
